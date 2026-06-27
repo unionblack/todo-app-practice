@@ -1,34 +1,66 @@
 <!DOCTYPE html>
-<html lang=”en-GB” data-framework="javascript">
+<html lang="ru">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport"
-  content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>TodoMVC Todo List Example in VanillaJS!</title>
-  <link rel="shortcut icon"
-  href="lib/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="shortcut icon" href="lib/favicon.ico" type="image/x-icon">
+    <!-- CSS-стили (делают приложение красивым) -->
+    <link rel="stylesheet" href="lib/todomvc-common-base.css">
+    <link rel="stylesheet" href="lib/todomvc-app.css">
 </head>
 <body>
-  <div id="app"></div>
-  <!-- CSS Styles are 100% optional. but they make it look *much* nicer -->
-  <link rel="stylesheet" href="lib/todomvc-common-base.css">
-  <link rel="stylesheet" href="lib/todomvc-app.css">
-  <script src="lib/elmish.js"></script>
-  <script src="lib/todo-app.js"></script>
-  <script>
-    var model = {
-      todos: [
-        // { id: 0, title: "Make something people want.", done: false },
-        // { id: 1, title: "Bootstrap for as long as you can", done: false },
-        // { id: 2, title: "Let's solve our own problem", done: false }
-      ],
-      hash: '#/', // the "route" to display
-      // editing: 2 // edit the 3rd todo list item (which has id == 2)
-    };
-    mount(model, update, view, 'app', subscriptions);
-  </script>
+    <!-- Корневой элемент, куда будет монтироваться приложение -->
+    <div id="app"></div>
 
-  <!-- Below this point is all related to the Tests for the App -->
-  <div id="test-app"></div> <!-- Create a test-app div to mount the app -->
+    <!-- Подключаем вспомогательный фреймворк и основное приложение -->
+    <script src="lib/elmish.js"></script>
+    <script src="lib/todo-app.js"></script>
+
+    <script>
+        // Начальное состояние приложения
+        var model = {
+            todos: [
+                { id: 1, title: "Изучить TDD", done: true },
+                { id: 2, title: "Собрать проект", done: false },
+                { id: 3, title: "Написать отчёт", done: false }
+            ],
+            hash: '#/'
+        };
+
+        /**
+         * Функция signal отправляет действия в update.
+         * Она возвращает функцию, которая будет вызвана при событии.
+         */
+        function signal(action, data) {
+            return function() {
+                // Обновляем модель
+                model = update(action, model, data);
+                // Перерендериваем приложение
+                render();
+            };
+        }
+
+        /**
+         * Функция render отображает приложение в DOM.
+         */
+        function render() {
+            var app = document.getElementById('app');
+            app.innerHTML = ''; // очищаем
+            app.appendChild(view(model, signal)); // рендерим заново
+        }
+
+        // Подписываемся на события (клавиатура, изменение URL)
+        subscriptions(signal);
+
+        // Первый рендер
+        render();
+
+        // Для удобства отладки в консоли
+        console.log('Todo App готов к работе!');
+    </script>
+
+    <!-- Контейнер для тестов (скрыт) -->
+    <div id="test-app" style="display: none;"></div>
 </body>
 </html>

@@ -134,7 +134,8 @@ test('render "main" view using (elmish) HTML DOM functions', function (t) {
   t.equal(items.length, 3, 'отображаются все три задачи');
 
   // Проверяем текст каждой задачи
-  const labels = document.querySelectorAll('label');
+// Стало (правильно)
+  const labels = document.querySelectorAll('.view label');
   t.equal(labels[0].textContent, 'Изучить TDD', 'первая задача');
   t.equal(labels[1].textContent, 'Собрать проект', 'вторая задача');
   t.equal(labels[2].textContent, 'Написать отчёт', 'третья задача');
@@ -175,6 +176,74 @@ test('render_footer view using (elmish) HTML DOM functions', function (t) {
   filters.forEach(function(el, index) {
     t.equal(el.textContent, filterTexts[index], 'фильтр: ' + filterTexts[index]);
   });
+
+  t.end();
+});
+
+
+// ... (предыдущие тесты) ...
+
+/**
+ * Тест проверяет, что `view` собирает всё приложение целиком
+ */
+test('view renders the whole todo app using "partials"', function (t) {
+  const model = {
+    todos: [
+      { id: 1, title: "Изучить TDD", done: true },
+      { id: 2, title: "Собрать проект", done: false },
+      { id: 3, title: "Написать отчёт", done: false }
+    ],
+    hash: '#/'
+  };
+
+  // Рендерим всё приложение
+  const root = document.getElementById('test-app');
+  root.innerHTML = '';
+  root.appendChild(app.view(model, mockSignal()));
+
+  // Проверяем заголовок
+  const h1 = document.querySelector('h1');
+  t.equal(h1.textContent, 'todos', 'заголовок "todos" отображается');
+
+  // Проверяем поле ввода
+  const input = document.getElementById('new-todo');
+  t.ok(input, 'поле ввода существует');
+  t.equal(input.getAttribute('placeholder'), 'Что нужно сделать?', 'плейсхолдер правильный');
+
+  // Проверяем, что все задачи отображаются
+  const items = document.querySelectorAll('.view');
+  t.equal(items.length, 3, 'отображаются все три задачи');
+
+  // Проверяем счётчик
+  const count = document.getElementById('count');
+  t.ok(count, 'счётчик существует');
+  t.equal(count.textContent, '2 задачаи осталось', 'правильное количество задач');
+
+  t.end();
+});
+
+/**
+ * Тест проверяет, что приложение правильно обрабатывает пустой список
+ */
+test('app should handle empty todo list', function (t) {
+  const emptyModel = {
+    todos: [],
+    hash: '#/'
+  };
+
+  const root = document.getElementById('test-app');
+  root.innerHTML = '';
+  root.appendChild(app.view(emptyModel, mockSignal()));
+
+  // Проверяем, что основная часть скрыта
+  const main = document.getElementById('main');
+  t.ok(main, 'секция main существует');
+  t.equal(main.style.display, 'none', 'main скрыта при пустом списке');
+
+  // Проверяем, что футер скрыт
+  const footer = document.getElementById('footer');
+  t.ok(footer, 'футер существует');
+  t.equal(footer.style.display, 'none', 'футер скрыт при пустом списке');
 
   t.end();
 });
