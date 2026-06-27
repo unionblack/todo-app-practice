@@ -73,3 +73,108 @@ test('`TOGGLE` (undo) a todo item from done=true to done=false', function (t) {
   t.deepEqual(model_todo_undone.todos[0], expected_false, "задача снова активна");
   t.end();
 });
+
+
+// ... (предыдущие тесты) ...
+
+/**
+ * Вспомогательная функция для тестов: имитирует signal
+ */
+function mockSignal() {
+  return function() { return function() {}; };
+}
+
+/**
+ * Тест проверяет, что `render_item` создаёт правильную структуру для одной задачи
+ */
+test('render_item HTML for a single Todo Item', function (t) {
+  // Создаём модель с одной задачей
+  const model = {
+    todos: [{ id: 1, title: "Изучить TDD", done: true }],
+    hash: '#/'
+  };
+
+  // Рендерим задачу и добавляем в DOM
+  const root = document.getElementById('test-app');
+  root.innerHTML = '';
+  root.appendChild(app.render_item(model.todos[0], model, mockSignal()));
+
+  // Проверяем, что задача отображается с правильным текстом
+  const label = document.querySelector('label');
+  t.equal(label.textContent, 'Изучить TDD', 'текст задачи отображается');
+
+  // Проверяем, что чекбокс отмечен (done: true)
+  const checkbox = document.querySelector('input[type="checkbox"]');
+  t.equal(checkbox.checked, true, 'задача отмечена как выполненная');
+
+  t.end();
+});
+
+/**
+ * Тест проверяет, что `render_main` создаёт список задач
+ */
+test('render "main" view using (elmish) HTML DOM functions', function (t) {
+  // Создаём модель с тремя задачами
+  const model = {
+    todos: [
+      { id: 1, title: "Изучить TDD", done: true },
+      { id: 2, title: "Собрать проект", done: false },
+      { id: 3, title: "Написать отчёт", done: false }
+    ],
+    hash: '#/'
+  };
+
+  // Рендерим основную часть и добавляем в DOM
+  const root = document.getElementById('test-app');
+  root.innerHTML = '';
+  root.appendChild(app.render_main(model, mockSignal()));
+
+  // Проверяем, что все три задачи отображаются
+  const items = document.querySelectorAll('.view');
+  t.equal(items.length, 3, 'отображаются все три задачи');
+
+  // Проверяем текст каждой задачи
+  const labels = document.querySelectorAll('label');
+  t.equal(labels[0].textContent, 'Изучить TDD', 'первая задача');
+  t.equal(labels[1].textContent, 'Собрать проект', 'вторая задача');
+  t.equal(labels[2].textContent, 'Написать отчёт', 'третья задача');
+
+  t.end();
+});
+
+/**
+ * Тест проверяет, что `render_footer` показывает правильное количество задач
+ */
+test('render_footer view using (elmish) HTML DOM functions', function (t) {
+  // Создаём модель с тремя задачами (одна выполнена, две активны)
+  const model = {
+    todos: [
+      { id: 1, title: "Изучить TDD", done: true },
+      { id: 2, title: "Собрать проект", done: false },
+      { id: 3, title: "Написать отчёт", done: false }
+    ],
+    hash: '#/'
+  };
+
+  // Рендерим футер и добавляем в DOM
+  const root = document.getElementById('test-app');
+  root.innerHTML = '';
+  root.appendChild(app.render_footer(model, mockSignal()));
+
+  // Проверяем, что счётчик показывает 2 активные задачи
+  const count = document.getElementById('count');
+  t.ok(count, 'счётчик существует');
+  t.equal(count.textContent, '2 задачаи осталось', 'правильное количество задач');
+
+  // Проверяем, что есть три ссылки-фильтра
+  const filters = document.querySelectorAll('.filters a');
+  t.equal(filters.length, 3, 'три фильтра: Все, Активные, Выполненные');
+
+  // Проверяем текст фильтров
+  const filterTexts = ['Все', 'Активные', 'Выполненные'];
+  filters.forEach(function(el, index) {
+    t.equal(el.textContent, filterTexts[index], 'фильтр: ' + filterTexts[index]);
+  });
+
+  t.end();
+});
