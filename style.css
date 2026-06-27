@@ -25,7 +25,7 @@ body {
     background: white;
     border-radius: 24px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(0, 0, 0, 0.06);
-    max-width: 800px;          /* Увеличили до 800px */
+    max-width: 1400px;          /* Увеличили до 800px */
     width: 100%;
     padding: 40px 50px 35px;
     transition: all 0.3s ease;
@@ -134,7 +134,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     gap: 16px 24px;
     padding: 20px 0 5px;
     border-top: 2px solid #f1f5f9;
@@ -268,4 +268,87 @@ body {
     .clear-completed {
         order: 3;
     }
+}
+
+
+html, body, #app, #app > div, [id^="app"], section.todoapp {
+    width: 100% !important;
+    max-width: 1000px !important; /* Укажите желаемую ширину здесь (например, 1200px или 1400px) */
+    min-width: 320px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+}
+
+/* Возвращаем жесткое центрирование на экране для body */
+body {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+}
+
+/* Гарантируем, что само приложение от Elmish тоже отцентрировано */
+#app {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* ===== ИСПРАВЛЕНИЕ ФУТЕРА ДЛЯ ШИРОКОГО ЭКРАНА ===== */
+
+/* 1. Делаем контейнер футера гибким флексбоксом */
+.todoapp .footer {
+    display: flex !important;
+    justify-content: space-between !important; /* Разносим элементы по краям */
+    align-items: center !important;
+    position: static !important; /* Отменяем абсолютное позиционирование, если оно было */
+    height: auto !important;
+    padding: 16px 24px !important;
+    border-top: 1px solid #e6e6e6 !important;
+}
+
+/* 2. Сбрасываем абсолютные координаты для счётчика задач */
+.todoapp .todo-count {
+    position: static !important;
+    float: none !important;
+    text-align: left !important;
+}
+
+/* ===== ДАТА СОЗДАНИЯ ЗАДАЧИ ===== */
+.created-at {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 400;
+    margin-left: 8px;
+    white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+    .created-at {
+        font-size: 10px;
+        margin-left: 6px;
+        display: block;
+        margin-top: 2px;
+    }
+}
+
+/* 3. Сбрасываем абсолютные координаты для блока с кнопками-фильтрами (Все, Активные, Выполненные) */
+.todoapp .filters {
+    position: static !important;
+    margin: 0 auto !important; /* Центрируем фильтры между левым и правым краем */
+    padding: 0 !important;
+    display: flex !important;
+    gap: 10px !important;
+    list-style: none !important;
+}
+
+/* 4. Сбрасываем абсолютные координаты для кнопки очистки выполненных */
+.todoapp .clear-completed {
+    position: static !important;
+    line-height: inherit !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
 }
