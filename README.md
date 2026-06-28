@@ -3,7 +3,7 @@
 Простое и удобное приложение для управления задачами (Todo-список). Проект создан в рамках учебной практики для демонстрации навыков веб-разработки на чистом JavaScript.
 
 
-![Демонстрация работы приложения](https://raw.githubusercontent.com/unionblack/todo-app-practice/main/demo/demo.gif)
+![Демонстрация работы приложения](https://raw.githubusercontent.com/unionblack/todo-app-practice/demo/demo.gif)
 
 ## Деплой
 
