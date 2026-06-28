@@ -4,7 +4,7 @@
 
 ## Деплой
 
-Живая демонстрация проекта: [Перейти на сайт](https://todo-app-practice.netlify.app)
+Живая демонстрация проекта: [Перейти на сайт](https://unionblack-todo-app.netlify.app/)
 
 ## Стек технологий
 
@@ -48,7 +48,8 @@ npm test
 
 ## Качество кода
 
-Бейдж Code Climate будет добавлен после подключения сервиса.
+Бейдж Code Climate [![Maintainability](https://qlty.sh/gh/unionblack/projects/todo-app-practice/maintainability.svg)](https://qlty.sh/gh/unionblack/projects/todo-app-practice)
+
 
 ## Исходный проект
 
