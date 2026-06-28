@@ -23,9 +23,9 @@
         // Начальное состояние приложения
         var model = {
             todos: [
-                { id: 1, title: "Изучить TDD", done: true },
-                { id: 2, title: "Собрать проект", done: false },
-                { id: 3, title: "Написать отчёт", done: false }
+                { id: 1, title: "Изучить TDD", done: true, createdAt: new Date().toISOString() },
+                { id: 2, title: "Собрать проект", done: false, createdAt: new Date().toISOString() },
+                { id: 3, title: "Написать отчёт", done: false, createdAt: new Date().toISOString() }
             ],
             hash: '#/'
         };
